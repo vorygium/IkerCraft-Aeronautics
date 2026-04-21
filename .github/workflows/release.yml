@@ -13,12 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
       - name: Install packwiz
-        run: |
-          curl -Lo packwiz.zip "https://nightly.link/packwiz/packwiz/workflows/go/main/packwiz_linux_amd64.zip"
-          unzip packwiz.zip
-          chmod +x packwiz
-          sudo mv packwiz /usr/local/bin/packwiz
+        run: go install github.com/packwiz/packwiz@latest
 
       - name: Refresh pack index
         run: packwiz refresh
