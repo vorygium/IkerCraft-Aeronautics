@@ -23,7 +23,17 @@ jobs:
         with:
           go-version: 'stable'
 
+      - name: Cache Go modules and packwiz binary
+        uses: actions/cache@v4
+        id: cache-packwiz
+        with:
+          path: |
+            ~/go/bin/packwiz
+            ~/go/pkg/mod
+          key: packwiz-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+
       - name: Install packwiz
+        if: steps.cache-packwiz.outputs.cache-hit != 'true'
         run: go install github.com/packwiz/packwiz@latest
 
       - name: Refresh pack index
