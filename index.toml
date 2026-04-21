@@ -1,6 +1,10 @@
 hash-format = "sha256"
 
 [[files]]
+file = "CustomSkinLoader/CustomSkinLoader.json"
+hash = "54843eecb90716c09d855f8d4644ef4a2024c638a7531ea3b55850c412220ad6"
+
+[[files]]
 file = "LICENSE"
 hash = "41003d4a74749c0220e33dd415042164b5a1093ed401f36277234f772d22d3d0"
 
@@ -55,6 +59,11 @@ metafile = true
 [[files]]
 file = "mods/create.pw.toml"
 hash = "9da22561c3a5e45beb91121518a49f2e8a62bedb332574ce43a9d9b287ebc705"
+metafile = true
+
+[[files]]
+file = "mods/customskinloader.pw.toml"
+hash = "6623d21c80a36e97eaf2214e27353a116c8419c941c8e4e2c15e034e1fd98abd"
 metafile = true
 
 [[files]]
