@@ -5,6 +5,10 @@ file = "LICENSE"
 hash = "41003d4a74749c0220e33dd415042164b5a1093ed401f36277234f772d22d3d0"
 
 [[files]]
+file = "config/distraction_free_recipes-client.toml"
+hash = "085ef2273eb4505aa3fd8e8243c10c3727a1e3de7ee4ed9a790d1c1b327c08f1"
+
+[[files]]
 file = "mods/almanac.pw.toml"
 hash = "19d6b20763edf0247e395db37d6e7e5b012ca063f5820c81a6330baff2218c4e"
 metafile = true
@@ -38,10 +42,6 @@ metafile = true
 file = "mods/chat-heads.pw.toml"
 hash = "8f0d13cc7d1b993657aa32e4495b9d75cfdd2e7f93f9a10dec522866e18afc6f"
 metafile = true
-
-[[files]]
-file = "mods/config/distraction_free_recipes-client.toml"
-hash = "085ef2273eb4505aa3fd8e8243c10c3727a1e3de7ee4ed9a790d1c1b327c08f1"
 
 [[files]]
 file = "mods/create-aeronautics.pw.toml"
