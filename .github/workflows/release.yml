@@ -15,21 +15,14 @@ jobs:
 
       - name: Install packwiz
         run: |
-          curl -Lo packwiz https://github.com/packwiz/packwiz/releases/latest/download/packwiz_linux_amd64
+          curl -Lo packwiz.zip "https://nightly.link/packwiz/packwiz/workflows/go/main/packwiz_linux_amd64.zip"
+          unzip packwiz.zip
           chmod +x packwiz
           sudo mv packwiz /usr/local/bin/packwiz
 
       - name: Refresh pack index
         run: packwiz refresh
 
-      - name: Deploy pack to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: gh-pages
-          force_orphan: false
-    
       - name: Export mrpack
         run: packwiz modrinth export
 
@@ -47,3 +40,11 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy pack to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          force_orphan: false
