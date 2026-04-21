@@ -9,6 +9,10 @@ file = "config/distraction_free_recipes-client.toml"
 hash = "085ef2273eb4505aa3fd8e8243c10c3727a1e3de7ee4ed9a790d1c1b327c08f1"
 
 [[files]]
+file = "config/modernfix-mixins.properties"
+hash = "5311001c2800c0bd47d09eda410fc9d3eb5e73dfe45f4a11a693b2a255283b44"
+
+[[files]]
 file = "mods/almanac.pw.toml"
 hash = "19d6b20763edf0247e395db37d6e7e5b012ca063f5820c81a6330baff2218c4e"
 metafile = true
