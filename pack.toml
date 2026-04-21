@@ -1,0 +1,15 @@
+name = "IkerCraft: Aeronautics"
+author = "Ivan"
+version = "0.0.1"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "a2077d44212924f6fff77aac3b1115f62e3f9a44edfdab8ca530f960fdcc5e40"
+
+[versions]
+minecraft = "1.21.1"
+neoforge = "21.1.227"
+
+[options]
