@@ -17,20 +17,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
 
-      - name: Cache Go modules and packwiz binary
+      # Resolve the actual version behind @latest
+      - name: Resolve packwiz version
+        id: packwiz-version
+        run: |
+          echo "version=$(go list -m -f '{{.Version}}' github.com/packwiz/packwiz@latest)" >> $GITHUB_OUTPUT
+
+      # Cache only the built binary using resolved version
+      - name: Cache packwiz binary
         uses: actions/cache@v4
         id: cache-packwiz
         with:
-          path: |
-            ~/go/bin/packwiz
-            ~/go/pkg/mod
-          key: packwiz-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          path: ~/go/bin/packwiz
+          key: packwiz-${{ runner.os }}-${{ steps.packwiz-version.outputs.version }}
 
       - name: Install packwiz
         if: steps.cache-packwiz.outputs.cache-hit != 'true'
@@ -57,10 +64,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Only deploy the built artifacts instead of the whole repo
+      - name: Prepare Pages content
+        run: |
+          mkdir public
+          cp *.mrpack public/
+
       - name: Deploy pack to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ./public
           publish_branch: gh-pages
           force_orphan: false
