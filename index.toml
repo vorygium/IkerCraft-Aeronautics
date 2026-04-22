@@ -82,11 +82,6 @@ hash = "67a405e6307f900d168deaa954a4309c3b44a6025e4efd7b8e774b6f9d3a69cd"
 metafile = true
 
 [[files]]
-file = "mods/create-diesel-generators.pw.toml"
-hash = "d31fbf89364ee8130adca0dfba3d6aa774d1771632aa60f3f13e1b4ed9e073e5"
-metafile = true
-
-[[files]]
 file = "mods/create-dragons-plus.pw.toml"
 hash = "fc735d35f6e6369789587084b9d5b168908bbbd82d309c5a5c20c5d63a6aea16"
 metafile = true
