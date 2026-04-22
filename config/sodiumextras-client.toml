@@ -1,0 +1,3 @@
+	[embeddiumextras.performance]
+			[embeddiumextras.performance.distanceCulling.entities]
+				enable = false
