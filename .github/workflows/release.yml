@@ -91,8 +91,8 @@ jobs:
         id: export
         run: |
           packwiz modrinth export
-          MRPACK=$(ls ./*.mrpack | xargs -n1 basename)
-          echo "mrpack-name=$MRPACK" >> "$GITHUB_OUTPUT"
+          MRPACK=$(find . -maxdepth 1 -name "*.mrpack" -printf "%f\n" | head -n1)
+          echo "mrpack-name=${MRPACK}" >> "$GITHUB_OUTPUT"
 
       # Upload the mrpack as a workflow artifact so the release job can
       # attach it to the GitHub release without re-running packwiz.
