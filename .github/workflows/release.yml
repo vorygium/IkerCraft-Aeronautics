@@ -7,281 +7,97 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # for creating GitHub releases
-  pages: write     # for deploying to GitHub Pages
-  id-token: write  # for OIDC token used by deploy-pages
-
-# ─── Exclusions ───────────────────────────────────────────────────────────────
-# Files and directories listed here are excluded from the hosted Pages site so
-# packwiz-installer only sees actual pack files. The same list is also written
-# into .packwizignore so packwiz itself respects them during export.
-# Syntax is identical to .gitignore. Entries already present in a committed
-# .packwizignore are never duplicated.
-env:
-  PACKWIZ_IGNORE: |
-    .git/
-    .github/
-    .gitignore
-    .gitattributes
-    .packwizignore
-    _site/
-    README.md
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   # ─── Build ────────────────────────────────────────────────────────────────
   build:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
-    outputs:
-      mrpack-name: ${{ steps.export.outputs.mrpack-name }}
 
     steps:
-      # Node.js is required by GitHub's JS actions (checkout, cache, etc.).
-      # rsync copies the pack tree into _site/ with pattern-based exclusions.
-      - name: Install base dependencies
-        run: apk add --no-cache git nodejs curl rsync
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
+      # Use official Go setup (faster + cached)
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
 
-      # ── Packwiz binary cache ──────────────────────────────────────────────
-      - name: Resolve packwiz upstream commit hash
-        id: packwiz-hash
-        run: |
-          HASH=$(git ls-remote https://github.com/packwiz/packwiz.git HEAD | cut -f1)
-          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
-
-      - name: Restore packwiz binary from cache
+      # Cache packwiz + modules
+      - name: Cache Go + packwiz
+        uses: actions/cache@v4
         id: cache-packwiz
-        uses: actions/cache@v4
         with:
-          path: /usr/local/bin/packwiz
-          key: packwiz-alpine-${{ steps.packwiz-hash.outputs.hash }}
+          path: |
+            ~/go/bin/packwiz
+            ~/go/pkg/mod
+          key: packwiz-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
-      # ── Go install (cache miss only) ──────────────────────────────────────
-      - name: Install Go
+      - name: Install packwiz
         if: steps.cache-packwiz.outputs.cache-hit != 'true'
-        run: apk add --no-cache go
+        run: go install github.com/packwiz/packwiz@latest
 
-      - name: Restore Go module cache
-        if: steps.cache-packwiz.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: /root/go/pkg/mod
-          key: go-mod-alpine-${{ steps.packwiz-hash.outputs.hash }}
-          restore-keys: go-mod-alpine-
+      - name: Refresh pack index
+        run: packwiz refresh
 
-      - name: Build and install packwiz
-        if: steps.cache-packwiz.outputs.cache-hit != 'true'
-        run: |
-          go install github.com/packwiz/packwiz@latest
-          cp "$(go env GOPATH)/bin/packwiz" /usr/local/bin/packwiz
+      - name: Export modpack
+        run: packwiz modrinth export
 
-      # ── Exclusions ───────────────────────────────────────────────────────
-      - name: Write .packwizignore
-        run: |
-          touch .packwizignore
-          printf '%s\n' "$PACKWIZ_IGNORE" | while IFS= read -r pattern; do
-            [ -z "$pattern" ] && continue
-            grep -qxF "$pattern" .packwizignore || echo "$pattern" >> .packwizignore
-          done
-
-      # ── Export ───────────────────────────────────────────────────────────
-      - name: Export modpack (.mrpack)
-        id: export
-        run: |
-          packwiz modrinth export
-          MRPACK=$(find . -maxdepth 1 -name "*.mrpack" -printf "%f\n" | head -n1)
-          echo "mrpack-name=${MRPACK}" >> "$GITHUB_OUTPUT"
-
-      # Upload the mrpack as a workflow artifact so the release job can
-      # attach it to the GitHub release without re-running packwiz.
+      # Upload artifact (no filename parsing needed)
       - name: Upload mrpack artifact
         uses: actions/upload-artifact@v4
         with:
           name: mrpack
-          path: ${{ steps.export.outputs.mrpack-name }}
+          path: "*.mrpack"
           retention-days: 1
 
       # ── Generate landing page ─────────────────────────────────────────────
-      # Reads metadata directly from pack.toml so the page always reflects the
-      # actual pack contents without needing a separate config file.
       - name: Generate index.html
         run: |
-          # ── Parse pack.toml ──
-          PACK_NAME=$(grep -m1 '^name'    pack.toml | sed 's/^name *= *"\(.*\)"/\1/')
-          PACK_VER=$(grep -m1  '^version' pack.toml | sed 's/^version *= *"\(.*\)"/\1/')
-          AUTHOR=$(grep -m1    '^author'  pack.toml | sed 's/^author *= *"\(.*\)"/\1/')
-          MC_VER=$(grep -m1 'minecraft'   pack.toml | sed 's/.*= *"\(.*\)"/\1/')
+          PACK_NAME=$(grep -m1 '^name' pack.toml | sed 's/^name *= *"\(.*\)"/\1/')
+          PACK_VER=$(grep -m1 '^version' pack.toml | sed 's/^version *= *"\(.*\)"/\1/')
+          AUTHOR=$(grep -m1 '^author' pack.toml | sed 's/^author *= *"\(.*\)"/\1/')
+          MC_VER=$(grep -m1 'minecraft' pack.toml | sed 's/.*= *"\(.*\)"/\1/')
+
           LOADER="Unknown"
           for l in fabric forge quilt neoforge; do
             if grep -qE "^${l} *= *\"" pack.toml; then
               case $l in
-                fabric)   LOADER="Fabric"   ;;
-                forge)    LOADER="Forge"    ;;
-                quilt)    LOADER="Quilt"    ;;
+                fabric) LOADER="Fabric" ;;
+                forge) LOADER="Forge" ;;
+                quilt) LOADER="Quilt" ;;
                 neoforge) LOADER="NeoForge" ;;
               esac
               break
             fi
           done
 
-          MRPACK="${{ steps.export.outputs.mrpack-name }}"
+          MRPACK=$(ls -1 *.mrpack | head -n1)
           TAG="${GITHUB_REF_NAME}"
           REPO="${GITHUB_REPOSITORY}"
           DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${TAG}/${MRPACK}"
 
           cat > index.html << HTML
           <!DOCTYPE html>
-          <html lang="en">
+          <html>
           <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${PACK_NAME}</title>
-            <style>
-              *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-              body {
-                font-family: system-ui, -apple-system, sans-serif;
-                background: #0f1117;
-                color: #e2e8f0;
-                min-height: 100dvh;
-                display: grid;
-                place-items: center;
-                padding: 2rem 1rem;
-              }
-
-              .card {
-                background: #1a1d27;
-                border: 1px solid #2d3148;
-                border-radius: 1.25rem;
-                padding: 3rem 2.5rem;
-                max-width: 540px;
-                width: 100%;
-                text-align: center;
-                box-shadow: 0 8px 48px rgba(0,0,0,.45);
-              }
-
-              .badge {
-                display: inline-block;
-                font-size: .7rem;
-                font-weight: 600;
-                letter-spacing: .08em;
-                text-transform: uppercase;
-                color: #818cf8;
-                background: rgba(129,140,248,.12);
-                border: 1px solid rgba(129,140,248,.25);
-                border-radius: 99px;
-                padding: .25rem .75rem;
-                margin-bottom: 1.25rem;
-              }
-
-              h1 {
-                font-size: clamp(1.75rem, 5vw, 2.5rem);
-                font-weight: 700;
-                line-height: 1.15;
-                letter-spacing: -.02em;
-                margin-bottom: .5rem;
-              }
-
-              .author {
-                font-size: .9rem;
-                color: #64748b;
-                margin-bottom: 2rem;
-              }
-
-              .meta {
-                display: flex;
-                justify-content: center;
-                gap: .75rem;
-                flex-wrap: wrap;
-                margin-bottom: 2.5rem;
-              }
-
-              .meta-item {
-                background: #0f1117;
-                border: 1px solid #2d3148;
-                border-radius: .5rem;
-                padding: .4rem .9rem;
-                font-size: .8rem;
-                color: #94a3b8;
-              }
-
-              .meta-item span {
-                color: #e2e8f0;
-                font-weight: 600;
-              }
-
-              .btn {
-                display: inline-flex;
-                align-items: center;
-                gap: .5rem;
-                background: #4f46e5;
-                color: #fff;
-                font-size: 1rem;
-                font-weight: 600;
-                text-decoration: none;
-                padding: .85rem 2rem;
-                border-radius: .75rem;
-                transition: background .15s, transform .1s;
-              }
-
-              .btn:hover  { background: #4338ca; transform: translateY(-1px); }
-              .btn:active { transform: translateY(0); }
-
-              .btn svg { flex-shrink: 0; }
-
-              .install-hint {
-                margin-top: 1.25rem;
-                font-size: .78rem;
-                color: #475569;
-              }
-
-              .install-hint code {
-                font-family: ui-monospace, monospace;
-                background: #0f1117;
-                border: 1px solid #2d3148;
-                border-radius: .3rem;
-                padding: .1rem .4rem;
-                color: #94a3b8;
-                font-size: .75rem;
-                word-break: break-all;
-              }
-            </style>
           </head>
           <body>
-            <div class="card">
-              <div class="badge">Minecraft Modpack</div>
-              <h1>${PACK_NAME}</h1>
-              <p class="author">by ${AUTHOR}</p>
-
-              <div class="meta">
-                <div class="meta-item">Minecraft <span>${MC_VER}</span></div>
-                <div class="meta-item">Loader <span>${LOADER}</span></div>
-                <div class="meta-item">Version <span>${PACK_VER}</span></div>
-              </div>
-
-              <a class="btn" href="${DOWNLOAD_URL}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Download ${PACK_VER}
-              </a>
-
-              <p class="install-hint">
-                Or install with packwiz-installer using<br>
-                <code>https://$(echo "$REPO" | cut -d/ -f1).github.io/$(echo "$REPO" | cut -d/ -f2)/pack.toml</code>
-              </p>
-            </div>
+            <h1>${PACK_NAME}</h1>
+            <p>Version: ${PACK_VER}</p>
+            <p>Minecraft: ${MC_VER}</p>
+            <p>Loader: ${LOADER}</p>
+            <p><a href="${DOWNLOAD_URL}">Download</a></p>
           </body>
           </html>
           HTML
 
-      # ── Prepare Pages site ────────────────────────────────────────────────
-      # rsync mirrors the whole repo into _site/ excluding .packwizignore
-      # patterns, then the generated index.html is placed at the root.
+      # ── Prepare Pages ─────────────────────────────────────────────────────
       - name: Prepare site directory
         run: |
           mkdir -p _site
@@ -294,8 +110,6 @@ jobs:
           path: _site
 
   # ─── Release ──────────────────────────────────────────────────────────────
-  # Creates a GitHub release for the tag and attaches the .mrpack so users
-  # can download it directly or reference it from Modrinth.
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -309,7 +123,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ needs.build.outputs.mrpack-name }}
+          files: "*.mrpack"
           generate_release_notes: true
 
   # ─── Deploy ───────────────────────────────────────────────────────────────

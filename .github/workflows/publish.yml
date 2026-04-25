@@ -11,7 +11,6 @@ permissions:
   pages: write
   id-token: write
 
-# Only allow one deployment at a time, but don't cancel in-progress runs
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -19,16 +18,23 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: golang:alpine
-    steps:
-      - name: Install system dependencies
-        # git    - required by actions/checkout inside a container
-        # nodejs - required by all actions/* toolkit actions
-        run: apk add --no-cache git nodejs
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # ── Go setup (replaces Alpine container entirely) ─────────────────────
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      # ── Cache packwiz ──────────────────────────────────────────────────────
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: go-mod-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
       - name: Install packwiz
         run: go install github.com/packwiz/packwiz@latest
@@ -39,11 +45,14 @@ jobs:
       - name: Export Modrinth pack
         run: packwiz modrinth export
 
+      # ── Build site ────────────────────────────────────────────────────────
       - name: Prepare site directory
         run: |
           mkdir -p _site
           cp *.mrpack _site/
-          MRPACK=$(ls *.mrpack | head -n1)
+
+          MRPACK=$(ls -1 *.mrpack | head -n1)
+
           cat > _site/index.html <<EOF
           <!DOCTYPE html>
           <html lang="en">
@@ -52,43 +61,46 @@ jobs:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Modpack Download</title>
             <style>
-              body { font-family: sans-serif; max-width: 600px; margin: 4rem auto; padding: 0 1rem; }
-              a { color: #1d7f3a; font-weight: bold; }
+              body {
+                font-family: sans-serif;
+                max-width: 600px;
+                margin: 4rem auto;
+                padding: 0 1rem;
+              }
+              a {
+                color: #1d7f3a;
+                font-weight: bold;
+              }
             </style>
           </head>
           <body>
             <h1>Modpack Download</h1>
-            <p>Latest export: <a href="${MRPACK}">${MRPACK}</a></p>
-            <p>Built from commit <code>${GITHUB_SHA}</code></p>
+            <p>
+              Latest export:
+              <a href="${MRPACK}">${MRPACK}</a>
+            </p>
+            <p>
+              Built from commit <code>${GITHUB_SHA}</code>
+            </p>
           </body>
           </html>
           EOF
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      # ── Upload Pages artifact ─────────────────────────────────────────────
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: mrpack-site
-          path: _site/
-          retention-days: 7
+          path: _site
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: mrpack-site
-          path: _site/
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site/
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
