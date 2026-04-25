@@ -47,5 +47,5 @@ This modpack is licensed under [CC BY-NC 4.0](https://creativecommons.org/licens
 
 ## Credits
 
-Created and maintained by **Iker**.  
+Created and maintained by **vorygium**.  
 Thanks to all the mod developers who made this pack possible!
