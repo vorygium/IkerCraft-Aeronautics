@@ -1,10 +1,9 @@
-name: Release Modpack
+name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'
-  workflow_dispatch:
+      - 'v*'
 
 permissions:
   contents: write
@@ -12,22 +11,19 @@ permissions:
   id-token: write
 
 jobs:
-  # ─── Build ────────────────────────────────────────────────────────────────
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Use official Go setup (faster + cached)
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
 
-      # Cache packwiz + modules
-      - name: Cache Go + packwiz
+      - name: Cache Go modules and packwiz binary
         uses: actions/cache@v4
         id: cache-packwiz
         with:
@@ -43,98 +39,28 @@ jobs:
       - name: Refresh pack index
         run: packwiz refresh
 
-      - name: Export modpack
+      - name: Export mrpack
         run: packwiz modrinth export
 
-      # Upload artifact (no filename parsing needed)
-      - name: Upload mrpack artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mrpack
-          path: "*.mrpack"
-          retention-days: 1
+      - name: Get tag name
+        id: tag
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      # ── Generate landing page ─────────────────────────────────────────────
-      - name: Generate index.html
-        run: |
-          PACK_NAME=$(grep -m1 '^name' pack.toml | sed 's/^name *= *"\(.*\)"/\1/')
-          PACK_VER=$(grep -m1 '^version' pack.toml | sed 's/^version *= *"\(.*\)"/\1/')
-          AUTHOR=$(grep -m1 '^author' pack.toml | sed 's/^author *= *"\(.*\)"/\1/')
-          MC_VER=$(grep -m1 'minecraft' pack.toml | sed 's/.*= *"\(.*\)"/\1/')
-
-          LOADER="Unknown"
-          for l in fabric forge quilt neoforge; do
-            if grep -qE "^${l} *= *\"" pack.toml; then
-              case $l in
-                fabric) LOADER="Fabric" ;;
-                forge) LOADER="Forge" ;;
-                quilt) LOADER="Quilt" ;;
-                neoforge) LOADER="NeoForge" ;;
-              esac
-              break
-            fi
-          done
-
-          MRPACK=$(ls -1 *.mrpack | head -n1)
-          TAG="${GITHUB_REF_NAME}"
-          REPO="${GITHUB_REPOSITORY}"
-          DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${TAG}/${MRPACK}"
-
-          cat > index.html << HTML
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <title>${PACK_NAME}</title>
-          </head>
-          <body>
-            <h1>${PACK_NAME}</h1>
-            <p>Version: ${PACK_VER}</p>
-            <p>Minecraft: ${MC_VER}</p>
-            <p>Loader: ${LOADER}</p>
-            <p><a href="${DOWNLOAD_URL}">Download</a></p>
-          </body>
-          </html>
-          HTML
-
-      # ── Prepare Pages ─────────────────────────────────────────────────────
-      - name: Prepare site directory
-        run: |
-          mkdir -p _site
-          rsync -a --exclude-from=.packwizignore --exclude=_site/ . _site/
-          mv index.html _site/index.html
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  # ─── Release ──────────────────────────────────────────────────────────────
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download mrpack artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: mrpack
-
-      - name: Create GitHub release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: "*.mrpack"
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ${{ steps.tag.outputs.tag }}
+          files: |
+            *.mrpack
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # ─── Deploy ───────────────────────────────────────────────────────────────
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy pack to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          force_orphan: false
