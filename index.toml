@@ -21,6 +21,10 @@ file = "config/sodiumextras-client.toml"
 hash = "9b51d981e3c6ed7f11d5ba0c4572328c3ae57700d25d8e9c820963598ea8803f"
 
 [[files]]
+file = "index.html"
+hash = "251419a49a5449beaa43f42cc7e0b9706ccb229eb70c33b2ff705bf7086bc7cb"
+
+[[files]]
 file = "mods/almanac.pw.toml"
 hash = "19d6b20763edf0247e395db37d6e7e5b012ca063f5820c81a6330baff2218c4e"
 metafile = true
@@ -87,12 +91,12 @@ metafile = true
 
 [[files]]
 file = "mods/create-dragons-plus.pw.toml"
-hash = "fc735d35f6e6369789587084b9d5b168908bbbd82d309c5a5c20c5d63a6aea16"
+hash = "44df18a2448d91a2e781af5e4ad1a639e70b79b4041bf846b8776166f8d2a5b9"
 metafile = true
 
 [[files]]
 file = "mods/create-enchantment-industry.pw.toml"
-hash = "5b1281a4c0766f71f72db9721090403e47893d23d7f8c05907b522d6d9188542"
+hash = "52f8600e5c7ab7358bee923cfff7cd2428d7599cb1ff3c0fdbd373330f770587"
 metafile = true
 
 [[files]]
@@ -202,7 +206,7 @@ metafile = true
 
 [[files]]
 file = "mods/modernfix.pw.toml"
-hash = "bac10dc72e41ee6df7a09ebd7e16e905897d54a2d9cb9f0c3fa14f569bd6d992"
+hash = "e152bb9ae171e9f34c406bbc29dc36c8d8def9d8f913e1a1bbf82bd63d4e8da9"
 metafile = true
 
 [[files]]
