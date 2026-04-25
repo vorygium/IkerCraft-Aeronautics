@@ -21,10 +21,6 @@ file = "config/sodiumextras-client.toml"
 hash = "9b51d981e3c6ed7f11d5ba0c4572328c3ae57700d25d8e9c820963598ea8803f"
 
 [[files]]
-file = "index.html"
-hash = "251419a49a5449beaa43f42cc7e0b9706ccb229eb70c33b2ff705bf7086bc7cb"
-
-[[files]]
 file = "mods/almanac.pw.toml"
 hash = "19d6b20763edf0247e395db37d6e7e5b012ca063f5820c81a6330baff2218c4e"
 metafile = true
