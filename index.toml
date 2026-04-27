@@ -5,10 +5,6 @@ file = "CustomSkinLoader/CustomSkinLoader.json"
 hash = "54843eecb90716c09d855f8d4644ef4a2024c638a7531ea3b55850c412220ad6"
 
 [[files]]
-file = "LICENSE"
-hash = "41003d4a74749c0220e33dd415042164b5a1093ed401f36277234f772d22d3d0"
-
-[[files]]
 file = "config/distraction_free_recipes-client.toml"
 hash = "085ef2273eb4505aa3fd8e8243c10c3727a1e3de7ee4ed9a790d1c1b327c08f1"
 
