@@ -9,6 +9,18 @@ file = "config/DistantHorizons.toml"
 hash = "d16cb96101332d91e4630af15ae48fe0cbe01606351e99900393cad1820a3c3e"
 
 [[files]]
+file = "config/defaultoptions/keybindings.txt"
+hash = "19e582af41926d28539f01d52c7bd0ec93cbc249fe10c1aea398e328e1912510"
+
+[[files]]
+file = "config/defaultoptions/options.txt"
+hash = "3c5dc04a527bf1ba0097f10c73c2f5e44e0b94c1b2db10c5bca9cbd45563b061"
+
+[[files]]
+file = "config/defaultoptions/servers.dat"
+hash = "12cdf7b40d47c3e15b45453a478ac53c9e6b908631c83ec4f862ccf33677922f"
+
+[[files]]
 file = "config/distraction_free_recipes-client.toml"
 hash = "085ef2273eb4505aa3fd8e8243c10c3727a1e3de7ee4ed9a790d1c1b327c08f1"
 
@@ -164,11 +176,6 @@ hash = "ef7868aa3a029cdb7a9a46fc3f55ae12c4bc86cb5d92ae889ed554acfa229c45"
 metafile = true
 
 [[files]]
-file = "mods/distanthorizons.pw.toml"
-hash = "133e7c9295b9e7e8577b5ca36cf9548b4c590eeb0708fdeb9cb59c2758759ac8"
-metafile = true
-
-[[files]]
 file = "mods/distraction-free-recipes.pw.toml"
 hash = "820727a4852072ccad40e99d05fdab98d7d5b214ef2fa1b01fc102408b0d322c"
 metafile = true
@@ -201,6 +208,11 @@ metafile = true
 [[files]]
 file = "mods/enchantment-descriptions.pw.toml"
 hash = "c6d69011793e9278c65ba14423fccdbc2421f62676bad2663ba85ad9c386ae28"
+metafile = true
+
+[[files]]
+file = "mods/farmers-delight.pw.toml"
+hash = "74a9c6f2f890649eb693c9f48c3d99148b5526e23371cf1a9a6276bd3b21b214"
 metafile = true
 
 [[files]]
@@ -244,6 +256,16 @@ hash = "27302b0087cf53570cd7a3b4eb550a208cbb6f6ba07210c604176155f39e0078"
 metafile = true
 
 [[files]]
+file = "mods/kubejs-create.pw.toml"
+hash = "531aa276b74eabc24566c57412527767238c74ee16b9c646dff511f56dba990c"
+metafile = true
+
+[[files]]
+file = "mods/kubejs.pw.toml"
+hash = "60d0f719a2fc1045e865fc38c0c6d04a733d0ce2e84173be86e999399bcc162d"
+metafile = true
+
+[[files]]
 file = "mods/lambdynamiclights.pw.toml"
 hash = "d77c41bf5a8dd470d65e7946d507657a910b54d2e76f4b3ced4fe4addc2d52d4"
 metafile = true
@@ -260,6 +282,11 @@ hash = "52c4b387f41a7bcc6ce85daeccd9356dd96314f5ea5df33ebc3ef0249c8c7500"
 [[files]]
 file = "mods/lmd.pw.toml"
 hash = "edc75ace846ae34c1cb4cf4a44106e1fb035b1eee0432765a716098c9a4b5823"
+metafile = true
+
+[[files]]
+file = "mods/lootr.pw.toml"
+hash = "114b4f1097f17b916cc5df3334aa57e34c6f4a108b87cb911e29134dd5ff980d"
 metafile = true
 
 [[files]]
@@ -300,6 +327,21 @@ metafile = true
 [[files]]
 file = "mods/reeses-sodium-options.pw.toml"
 hash = "09306b955060349986ccf6a6d2a67f1e019fa172a7dc690dd6007f81c966309a"
+metafile = true
+
+[[files]]
+file = "mods/refined-storage-emi-integration.pw.toml"
+hash = "4a5af515250fbde913593346d51b2c4ac8f660e71ba21f65f49a02209bb65509"
+metafile = true
+
+[[files]]
+file = "mods/refined-storage.pw.toml"
+hash = "38d8d170b037bea147ebd0c12fa6ced5102c3b229e90e492fc7bda8b07b19b6c"
+metafile = true
+
+[[files]]
+file = "mods/rhino.pw.toml"
+hash = "6b91f46291891e725189b0bd54d0db0f66925b1e785bdfa737592dfcf41a79a3"
 metafile = true
 
 [[files]]
@@ -345,6 +387,21 @@ metafile = true
 [[files]]
 file = "mods/sodium.pw.toml"
 hash = "0281ed9713f3141bdac363056a791845510e14761ea65b4b2813cf96d664b20a"
+metafile = true
+
+[[files]]
+file = "mods/sophisticated-backpacks.pw.toml"
+hash = "5d456b77b7ba6381ee745161d355843c52bdc20b0eab644bd6152dc669ae3d58"
+metafile = true
+
+[[files]]
+file = "mods/sophisticated-core.pw.toml"
+hash = "d34ef6a8ae4fa661524b3d93467004430e66656ba762843d915aaca6a0c23f63"
+metafile = true
+
+[[files]]
+file = "mods/sophisticated-storage.pw.toml"
+hash = "0af154df6e7fe6999b6acc493cc55f41597de5bdd0c8b84b4c2d0ae6f343a362"
 metafile = true
 
 [[files]]
