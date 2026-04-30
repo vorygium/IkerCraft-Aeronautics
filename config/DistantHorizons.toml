@@ -1,0 +1,9 @@
+[server]
+    maxSyncOnLoadRequestDistance = 256
+    maxGenerationRequestDistance = 256
+
+
+[client]
+		[client.advanced.graphics]
+			[client.advanced.graphics.quality]
+                lodChunkRenderDistanceRadius = 32
