@@ -6,7 +6,7 @@ hash = "54843eecb90716c09d855f8d4644ef4a2024c638a7531ea3b55850c412220ad6"
 
 [[files]]
 file = "config/DistantHorizons.toml"
-hash = "1e10e00f56142cf74b81995c5ec58b9f43ad93cadd6ea872deb33841ca30d99e"
+hash = "d16cb96101332d91e4630af15ae48fe0cbe01606351e99900393cad1820a3c3e"
 
 [[files]]
 file = "config/distraction_free_recipes-client.toml"

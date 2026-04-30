@@ -6,4 +6,4 @@
 [client]
 		[client.advanced.graphics]
 			[client.advanced.graphics.quality]
-                lodChunkRenderDistanceRadius = 128
+                lodChunkRenderDistanceRadius = 32
