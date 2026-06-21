@@ -1,13 +1,13 @@
 name = "Refined Storage"
-filename = "refinedstorage-neoforge-2.0.4.jar"
+filename = "refinedstorage-neoforge-2.0.9.jar"
 side = "both"
 
 [download]
-url = "https://cdn.modrinth.com/data/KDvYkUg3/versions/6FqDjaVE/refinedstorage-neoforge-2.0.4.jar"
+url = "https://cdn.modrinth.com/data/KDvYkUg3/versions/lHHiI26k/refinedstorage-neoforge-2.0.9.jar"
 hash-format = "sha512"
-hash = "b76b0402668f3ec40d46e7bedbd8d53716c812b3cf31e577bbd857ebf49900b609eebc2ade6b1d9b0aaf9cc641f116a294fa73e8b6b6437a1c9068f5db0ec88c"
+hash = "b98a938b8af859f1952bfb35fb6db712835a7dead88fa15258ac0f4f06b26b08ebfa49fd9a35b2c81f7a745b3cd4370ced98c242d0fe7473ba019d92da8f6c57"
 
 [update]
 [update.modrinth]
 mod-id = "KDvYkUg3"
-version = "6FqDjaVE"
+version = "lHHiI26k"
