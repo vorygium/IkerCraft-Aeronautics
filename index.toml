@@ -276,6 +276,11 @@ hash = "b2328b4d6a0a5ae5d4299bdc8e0c0274cdf2bb2bdd700d7fff6099e5caf05fc4"
 metafile = true
 
 [[files]]
+file = "mods/invmove.pw.toml"
+hash = "a246c345f9568f6b244d017c4201c6170b1ad54808c9c4799c146a0a794663aa"
+metafile = true
+
+[[files]]
 file = "mods/jade.pw.toml"
 hash = "b6e0a61fea06f8d6d8e1672cf07b682625c4b74efd548d5093cd9c1fed167eec"
 metafile = true
