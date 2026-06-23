@@ -77,7 +77,22 @@ metafile = true
 
 [[files]]
 file = "mods/c2me-neoforge.pw.toml"
-hash = "17cf45aaab6d4964d4d851cfcbe4b5e6db539a2329216392bec4aea1c90b83a7"
+hash = "0489b03d1e95f2f374e8925e780228ce68bd97456c2ed57957973ef4f9e5ff03"
+metafile = true
+
+[[files]]
+file = "mods/carry-on.pw.toml"
+hash = "c5e47d922e39c1556dc2e8c94bfe852cf16de14f65b99eb3e054e41745dddad0"
+metafile = true
+
+[[files]]
+file = "mods/carryon-aeronautics-compat.pw.toml"
+hash = "575ebf4c7a4d60e8db84e1dbbfed2c9bc73cd50abd61e5f37d92ac9a97cfd900"
+metafile = true
+
+[[files]]
+file = "mods/cave-dweller-reevolved.pw.toml"
+hash = "b8d2a44aad58e1acdfdead3d59f9f5e920ad1ee3e3f9bff294fa2a3218ee82eb"
 metafile = true
 
 [[files]]
@@ -181,6 +196,11 @@ hash = "b2059d79bf6e41281a26b5b75a8f0cb20804079fe49a22042a26aa5ce28ba7f5"
 metafile = true
 
 [[files]]
+file = "mods/curios.pw.toml"
+hash = "36debf7653e95a855b4fedacc19027cf2e01960fc0b6d55ef2ffbffbcb455690"
+metafile = true
+
+[[files]]
 file = "mods/customskinloader.pw.toml"
 hash = "aec1df84ab0edd3ab36d80a08765ab0ae3754c2bdbb4e9f568e979f01f470234"
 metafile = true
@@ -257,7 +277,7 @@ metafile = true
 
 [[files]]
 file = "mods/geckolib.pw.toml"
-hash = "0521ed2becdf2b460511c92e80e2702a4b6e540c85c99fb571844e1c7c505724"
+hash = "58234f79e5a0cf300e6cfbb068a16d154c6489ff6d784c1a5cfe6ea9755625f4"
 metafile = true
 
 [[files]]
@@ -272,7 +292,7 @@ metafile = true
 
 [[files]]
 file = "mods/insanelib.pw.toml"
-hash = "b2328b4d6a0a5ae5d4299bdc8e0c0274cdf2bb2bdd700d7fff6099e5caf05fc4"
+hash = "6cb5aea94f9166c86ceeeb5a7a7045b2ca2cc3e0d5f50fc2aeb36a584538d8b9"
 metafile = true
 
 [[files]]
@@ -326,8 +346,8 @@ hash = "58e0bebd41fa44f3f0dd6c053ec3eb1529d4bfe0c054c0741ba6e2e1b8e4523e"
 metafile = true
 
 [[files]]
-file = "mods/lithostitched-1.7.2-neoforge-21.1.jar"
-hash = "52c4b387f41a7bcc6ce85daeccd9356dd96314f5ea5df33ebc3ef0249c8c7500"
+file = "mods/lithostitched-1.7.9-neoforge-21.1.jar"
+hash = "9da5826e349f8a58dca526f7afcec9cdd7d6906577945242c87462aa6debcdee"
 
 [[files]]
 file = "mods/lmd.pw.toml"
@@ -471,12 +491,12 @@ metafile = true
 
 [[files]]
 file = "mods/sophisticated-core.pw.toml"
-hash = "e3821b3cb161f7ae9cb0d773e54658262ac8f562da879ae4da4577c07ddb4884"
+hash = "82e9a1a3374847c0cda6bd0cef3718df19983226742f988f80a04cee0e94a45f"
 metafile = true
 
 [[files]]
 file = "mods/sophisticated-storage.pw.toml"
-hash = "005494e0aa66f4ffb77a0193f22c0c21ee75e1a1274b19922b09ed767340f346"
+hash = "5e88c14b495658babbf18756aef04bb2896183837c184d2be96a1127a5135901"
 metafile = true
 
 [[files]]
@@ -496,7 +516,7 @@ metafile = true
 
 [[files]]
 file = "mods/xaeros-world-map.pw.toml"
-hash = "66f85f7c21c70440f919d91a96190854c9af6b50f2214153ea0ab0a5c949ccdc"
+hash = "67121835339ff35bc213b2ede0375d10de4c1fc9f40c7579a47ebc1a3d050648"
 metafile = true
 
 [[files]]
